@@ -57,6 +57,7 @@ public abstract class UDFTransformerDS9 {
 	private final static String OPTION_BUFFERS =      "buffers";
 	private final static String OPTION_INPUT_SEP =    "input-sep";
 	private final static String OPTION_OUTPUT_SEP =   "output-sep";
+	private final static String OPTION_ARRAY_SEP =    "array-sep";
 
 	private static final int    DEFAULT_NUM_BUFFERS = 1;
 
@@ -102,6 +103,15 @@ public abstract class UDFTransformerDS9 {
 				.numberOfArgs (1)
 				.build());
 
+		options.addOption(Option.builder()
+				.longOpt      (OPTION_ARRAY_SEP)
+				.desc         ("array element separator (default: [<STX>], i.e. ASCII Control Character <Start of Text> = 0x02)")
+				.required     (false)
+				.hasArg       (true)
+				.argName      ("separator")
+				.numberOfArgs (1)
+				.build());
+
 		String usageHeader = "Stdin: Line with Hive TSV\n"
 				+ "Stdout: Hive TSV as defined by --columns\n";
 		
@@ -121,6 +131,7 @@ public abstract class UDFTransformerDS9 {
 			commandLine = parser.parse(options, args);
 			if (commandLine.hasOption(OPTION_INPUT_SEP)) StaticOptionHolder.inputsep = commandLine.getOptionValue(OPTION_INPUT_SEP);
 			if (commandLine.hasOption(OPTION_OUTPUT_SEP)) StaticOptionHolder.outputsep = commandLine.getOptionValue(OPTION_OUTPUT_SEP);
+			if (commandLine.hasOption(OPTION_ARRAY_SEP)) StaticOptionHolder.arraysep = commandLine.getOptionValue(OPTION_ARRAY_SEP);
 		} catch (ParseException e) {
 			System.err.println(e.getMessage());
 			boolean autoUsageYes = true;
